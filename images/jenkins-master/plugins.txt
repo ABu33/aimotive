@@ -1,0 +1,6 @@
+git-client:2.9.0
+git:3.12.1
+workflow-aggregator:2.6
+workflow-scm-step:2.9
+workflow-cps:2.74
+docker-workflow:1.21

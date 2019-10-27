@@ -1,0 +1,28 @@
+node {
+    stage('Prepare') {
+        git url: 'https://github.com/ABu33/aimotive.git'
+        def dockerfile = 'images/jenkins-slave/Dockerfile'
+
+        docker.build("yaml-cpp-builder:0.1 -f ${dockerfile}")
+    }
+
+    stage('Build yaml-cpp') {
+        docker.image("yaml-cpp-builder:0.1").inside("-v /var/jenkins_home/artifact:/home/jenkins/artifact --cpus=\"2\" --memory=\"2g\"") {
+            sh """
+               #!/usr/bin/env bash
+               
+               set -e
+               
+               rm -rf yaml-cpp
+               git clone https://github.com/jbeder/yaml-cpp.git
+               mkdir yaml-cpp/build
+               cd yaml-cpp/build
+               cmake ..
+               cmake --build .
+               version=\$(grep 'Version:' yaml-cpp.pc | grep -Eo '[0-9.]+')
+               artifact_name="yaml-cpp-\"\$version\".tar.gz"
+               tar -zcf /home/jenkins/artifact/"\$artifact_name" .
+			"""
+        }
+    }
+}
