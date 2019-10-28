@@ -1,0 +1,233 @@
+Started by user admin
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/aimotive
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Prepare)
+[Pipeline] git
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ABu33/aimotive.git # timeout=10
+Fetching upstream changes from https://github.com/ABu33/aimotive.git
+ > git --version # timeout=10
+ > git fetch --tags --progress -- https://github.com/ABu33/aimotive.git +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision 2d2a88fa497255c0115d917849ed1089889c431b (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 2d2a88fa497255c0115d917849ed1089889c431b
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D master # timeout=10
+ > git checkout -b master 2d2a88fa497255c0115d917849ed1089889c431b
+Commit message: "Console output added"
+ > git rev-list --no-walk 20ebff20c04a7ad0e685503cba5fdc194e366118 # timeout=10
+[Pipeline] isUnix
+[Pipeline] sh
++ docker build -t yaml-cpp-builder:0.1 -f images/jenkins-slave/Dockerfile .
+Sending build context to Docker daemon  58.06MB
+
+Step 1/14 : FROM ubuntu:18.04
+ ---> cf0f3ca922e0
+Step 2/14 : ARG user=jenkins
+ ---> Using cache
+ ---> e1d8bd281935
+Step 3/14 : ARG group=jenkins
+ ---> Using cache
+ ---> 1d184de9a23c
+Step 4/14 : ARG uid=1000
+ ---> Using cache
+ ---> 8e8148662c8b
+Step 5/14 : ARG gid=1000
+ ---> Using cache
+ ---> 1f2d1b42e0a4
+Step 6/14 : RUN groupadd -g ${gid} ${group}
+ ---> Using cache
+ ---> a2cefacd8030
+Step 7/14 : RUN useradd -c "Jenkins user" -d /home/${user} -u ${uid} -g ${gid} -m ${user}
+ ---> Using cache
+ ---> 2ceb024d23c1
+Step 8/14 : ARG AGENT_WORKDIR=/home/${user}/agent
+ ---> Using cache
+ ---> 270bc3464ece
+Step 9/14 : RUN apt-get update && apt-get install -y   cmake   git   build-essential   python3-dev
+ ---> Using cache
+ ---> 0d84a565a1e7
+Step 10/14 : USER ${user}
+ ---> Using cache
+ ---> c5e90c0de5c2
+Step 11/14 : ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+ ---> Using cache
+ ---> 74188f102e2c
+Step 12/14 : RUN mkdir -p /home/${user}/.jenkins ${AGENT_WORKDIR} /home/${user}/artifact
+ ---> Using cache
+ ---> 9667e20b96f0
+Step 13/14 : VOLUME /home/${user}/artifact
+ ---> Using cache
+ ---> 9630dcb0005d
+Step 14/14 : WORKDIR /home/${user}
+ ---> Using cache
+ ---> 402287713334
+Successfully built 402287713334
+Successfully tagged yaml-cpp-builder:0.1
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build yaml-cpp)
+[Pipeline] isUnix
+[Pipeline] sh
++ docker inspect -f . yaml-cpp-builder:0.1
+.
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 14718f8da7f462f6eb2bb15513380c5dec0782ea7892f9961a07dc446299daab
+$ docker run -t -d -u 1000:1000 -v /var/jenkins_home/artifact:/home/jenkins/artifact --cpus=2 --memory=2g -w /var/jenkins_home/workspace/aimotive --volumes-from 14718f8da7f462f6eb2bb15513380c5dec0782ea7892f9961a07dc446299daab -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** yaml-cpp-builder:0.1 cat
+$ docker top 9c7ec10c3f29f4c7ad7d46df6a2dddbf41f3bf251912960ef7172de32c264a25 -eo pid,comm
+[Pipeline] {
+[Pipeline] sh
++ set -e
++ rm -rf yaml-cpp
++ git clone https://github.com/jbeder/yaml-cpp.git
+Cloning into 'yaml-cpp'...
++ mkdir yaml-cpp/build
++ cd yaml-cpp/build
++ cmake ..
+-- The CXX compiler identification is GNU 7.4.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- The C compiler identification is GNU 7.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found PythonInterp: /usr/bin/python3.6 (found version "3.6.8") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /var/jenkins_home/workspace/aimotive/yaml-cpp/build
++ cmake --build .
+Scanning dependencies of target yaml-cpp
+[  1%] Building CXX object CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilder.cpp.o
+[  3%] Building CXX object CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilderadapter.cpp.o
+[  4%] Building CXX object CMakeFiles/yaml-cpp.dir/src/binary.cpp.o
+[  6%] Building CXX object CMakeFiles/yaml-cpp.dir/src/convert.cpp.o
+In file included from /var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/convert.h:18:0,
+                 from /var/jenkins_home/workspace/aimotive/yaml-cpp/src/convert.cpp:3:
+/var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/impl.h: In member function 'YAML::Node& YAML::Node::operator=(const T&)':
+/var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/impl.h:208:11: warning: 'operator=' should return a reference to '*this' [-Weffc++]
+   return *this;
+           ^~~~
+[  8%] Building CXX object CMakeFiles/yaml-cpp.dir/src/directives.cpp.o
+[  9%] Building CXX object CMakeFiles/yaml-cpp.dir/src/emit.cpp.o
+[ 11%] Building CXX object CMakeFiles/yaml-cpp.dir/src/emitfromevents.cpp.o
+[ 13%] Building CXX object CMakeFiles/yaml-cpp.dir/src/emitter.cpp.o
+[ 14%] Building CXX object CMakeFiles/yaml-cpp.dir/src/emitterstate.cpp.o
+[ 16%] Building CXX object CMakeFiles/yaml-cpp.dir/src/emitterutils.cpp.o
+[ 18%] Building CXX object CMakeFiles/yaml-cpp.dir/src/exceptions.cpp.o
+[ 19%] Building CXX object CMakeFiles/yaml-cpp.dir/src/exp.cpp.o
+[ 21%] Building CXX object CMakeFiles/yaml-cpp.dir/src/memory.cpp.o
+[ 22%] Building CXX object CMakeFiles/yaml-cpp.dir/src/node.cpp.o
+[ 24%] Building CXX object CMakeFiles/yaml-cpp.dir/src/node_data.cpp.o
+[ 26%] Building CXX object CMakeFiles/yaml-cpp.dir/src/nodebuilder.cpp.o
+In file included from /var/jenkins_home/workspace/aimotive/yaml-cpp/src/nodebuilder.cpp:5:0:
+/var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/impl.h: In member function 'YAML::Node& YAML::Node::operator=(const T&)':
+/var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/impl.h:208:11: warning: 'operator=' should return a reference to '*this' [-Weffc++]
+   return *this;
+           ^~~~
+[ 27%] Building CXX object CMakeFiles/yaml-cpp.dir/src/nodeevents.cpp.o
+[ 29%] Building CXX object CMakeFiles/yaml-cpp.dir/src/null.cpp.o
+[ 31%] Building CXX object CMakeFiles/yaml-cpp.dir/src/ostream_wrapper.cpp.o
+[ 32%] Building CXX object CMakeFiles/yaml-cpp.dir/src/parse.cpp.o
+In file included from /var/jenkins_home/workspace/aimotive/yaml-cpp/src/parse.cpp:7:0:
+/var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/impl.h: In member function 'YAML::Node& YAML::Node::operator=(const T&)':
+/var/jenkins_home/workspace/aimotive/yaml-cpp/include/yaml-cpp/node/impl.h:208:11: warning: 'operator=' should return a reference to '*this' [-Weffc++]
+   return *this;
+           ^~~~
+[ 34%] Building CXX object CMakeFiles/yaml-cpp.dir/src/parser.cpp.o
+[ 36%] Building CXX object CMakeFiles/yaml-cpp.dir/src/regex_yaml.cpp.o
+[ 37%] Building CXX object CMakeFiles/yaml-cpp.dir/src/scanner.cpp.o
+[ 39%] Building CXX object CMakeFiles/yaml-cpp.dir/src/scanscalar.cpp.o
+[ 40%] Building CXX object CMakeFiles/yaml-cpp.dir/src/scantag.cpp.o
+[ 42%] Building CXX object CMakeFiles/yaml-cpp.dir/src/scantoken.cpp.o
+[ 44%] Building CXX object CMakeFiles/yaml-cpp.dir/src/simplekey.cpp.o
+[ 45%] Building CXX object CMakeFiles/yaml-cpp.dir/src/singledocparser.cpp.o
+[ 47%] Building CXX object CMakeFiles/yaml-cpp.dir/src/stream.cpp.o
+[ 49%] Building CXX object CMakeFiles/yaml-cpp.dir/src/tag.cpp.o
+[ 50%] Linking CXX static library libyaml-cpp.a
+[ 50%] Built target yaml-cpp
+Scanning dependencies of target gmock
+[ 52%] Building CXX object test/prefix/googlemock/CMakeFiles/gmock.dir/__/googletest/src/gtest-all.cc.o
+[ 54%] Building CXX object test/prefix/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
+[ 55%] Linking CXX static library libgmock.a
+[ 55%] Built target gmock
+Scanning dependencies of target yaml-cpp-tests
+[ 57%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/main.cpp.o
+[ 59%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/ostream_wrapper_test.cpp.o
+[ 60%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/regex_test.cpp.o
+[ 62%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/emitter_test.cpp.o
+[ 63%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/encoding_test.cpp.o
+[ 65%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/error_messages_test.cpp.o
+[ 67%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/gen_emitter_test.cpp.o
+[ 68%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/handler_spec_test.cpp.o
+[ 70%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/handler_test.cpp.o
+[ 72%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/load_node_test.cpp.o
+[ 73%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/integration/node_spec_test.cpp.o
+[ 75%] Building CXX object test/CMakeFiles/yaml-cpp-tests.dir/node/node_test.cpp.o
+[ 77%] Linking CXX executable yaml-cpp-tests
+[ 77%] Built target yaml-cpp-tests
+Scanning dependencies of target gmock_main
+[ 78%] Building CXX object test/prefix/googlemock/CMakeFiles/gmock_main.dir/__/googletest/src/gtest-all.cc.o
+[ 80%] Building CXX object test/prefix/googlemock/CMakeFiles/gmock_main.dir/src/gmock-all.cc.o
+[ 81%] Building CXX object test/prefix/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+[ 83%] Linking CXX static library libgmock_main.a
+[ 83%] Built target gmock_main
+Scanning dependencies of target gtest
+[ 85%] Building CXX object test/prefix/googlemock/gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+[ 86%] Linking CXX static library libgtest.a
+[ 86%] Built target gtest
+Scanning dependencies of target gtest_main
+[ 88%] Building CXX object test/prefix/googlemock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 90%] Linking CXX static library libgtest_main.a
+[ 90%] Built target gtest_main
+Scanning dependencies of target yaml-cpp-parse
+[ 91%] Building CXX object util/CMakeFiles/yaml-cpp-parse.dir/parse.cpp.o
+[ 93%] Linking CXX executable parse
+[ 93%] Built target yaml-cpp-parse
+Scanning dependencies of target yaml-cpp-sandbox
+[ 95%] Building CXX object util/CMakeFiles/yaml-cpp-sandbox.dir/sandbox.cpp.o
+[ 96%] Linking CXX executable sandbox
+[ 96%] Built target yaml-cpp-sandbox
+Scanning dependencies of target yaml-cpp-read
+[ 98%] Building CXX object util/CMakeFiles/yaml-cpp-read.dir/read.cpp.o
+[100%] Linking CXX executable read
+[100%] Built target yaml-cpp-read
++ grep Version: yaml-cpp.pc
++ grep -Eo [0-9.]+
++ version=0.6.3
++ artifact_name=yaml-cpp-0.6.3.tar.gz
++ tar -zcf /home/jenkins/artifact/yaml-cpp-0.6.3.tar.gz .
+[Pipeline] }
+$ docker stop --time=1 9c7ec10c3f29f4c7ad7d46df6a2dddbf41f3bf251912960ef7172de32c264a25
+$ docker rm -f 9c7ec10c3f29f4c7ad7d46df6a2dddbf41f3bf251912960ef7172de32c264a25
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
